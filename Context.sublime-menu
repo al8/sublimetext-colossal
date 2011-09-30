@@ -1,5 +1,3 @@
 [
-    { "caption": "-" },
-    { "caption": "Colossal Text", "command": "ascii_colossal"},
-    { "caption": "-" }
+    { "caption": "Colossal Text", "command": "ascii_colossal"}
 ]
