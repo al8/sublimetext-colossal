@@ -1,0 +1,1 @@
+make colossal words in sublime for greater visibility in the minimap
