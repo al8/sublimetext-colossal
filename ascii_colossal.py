@@ -1,3 +1,8 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+
 import string
 
 #view.runCommand('ascii_colossal')
@@ -93,13 +98,13 @@ def run(lines_lst):
         lst.append(l)
         lst.append(block_text(l, g_char_dict))
 
-    return string.join(lst, "\n\n")
+    return "\n\n".join(lst)
 
 
 def parse(txt, debug_print = False):
     txt = txt.split("\n")
     chars = txt[0]
-    if debug_print: print "CHARS:", chars
+    if debug_print: print("CHARS:", chars)
     char_dict = {}
     gap_list = []
 
@@ -107,18 +112,18 @@ def parse(txt, debug_print = False):
     done = False
     while not done:
         all_gaps = True
-        for i in xrange(1, len(txt)):
+        for i in range(1, len(txt)):
             if txt[i][idx] != " ": all_gaps = False
             done = done or (idx+1 >= len(txt[i]))
         if all_gaps: gap_list.append(idx)
         idx += 1
 
-    if len(chars) != len(gap_list): print "ASCII COLOSSAL: ERROR not enough chars found for '%s'" % chars
+    if len(chars) != len(gap_list): print("ASCII COLOSSAL: ERROR not enough chars found for '%s'" % chars)
     last_idx = 0
     for c, g in zip(chars, gap_list):
-        if debug_print: print c, g
+        if debug_print: print(c, g)
         lines_list = []
-        for i in xrange(1, len(txt)):
+        for i in range(1, len(txt)):
             lines_list.append(txt[i][last_idx:g])
         last_idx = g
         char_dict[c] = lines_list
@@ -134,15 +139,14 @@ def block_text(txt, char_dict):
             char_list.append(l)
             line_count = len(l)
     lines_list = []
-    for l in xrange(line_count):
-        line = string.join(map(lambda x: x[l], char_list), "")
+    for l in range(line_count):
+        line = "".join(map(lambda x: x[l], char_list))
         lines_list.append(line)
-    return string.join(lines_list, "\n")
-
+    return "\n".join(lines_list)
 
 def load(debug_print = False):
     global g_char_dict
-    print "ASCII COLOSSAL: Loading"
+    print("ASCII COLOSSAL: Loading")
     char_dict = {}
     rc = parse(caps, debug_print = debug_print); char_dict.update(rc)
     rc = parse(lower, debug_print = debug_print); char_dict.update(rc)
@@ -162,21 +166,21 @@ def load(debug_print = False):
 
 if __name__ == "__main__":
     load(debug_print = True)
-    print block_text("#@$(", g_char_dict)
+    print(block_text("#@$(", g_char_dict))
 
 
 if __name__ != "__main__":
     import sublime, sublime_plugin
 
-    # Extends TextCommand so that run() receives a View to modify.  
+    # Extends TextCommand so that run() receives a View to modify.
     class ascii_colossal(sublime_plugin.TextCommand):
-        def run(self, edit):  
+        def run(self, edit):
             view = self.view
-            print "ascii colossal"
-            # Walk through each region in the selection  
-            for region in view.sel():  
+            print("ascii colossal")
+            # Walk through each region in the selection
+            for region in view.sel():
                 if region.empty():
-                    print "error: nothing selected"
+                    print("error: nothing selected")
                 else:
                     # print "create instance 1", dir(region)
                     block = view.line(region)
@@ -192,6 +196,6 @@ if __name__ != "__main__":
 
                     # view.insert(block.end(), new_str)
                     # view.insert(block.end(), '\n')
-                    
+
                     view.replace(edit, region, new_str)
 
